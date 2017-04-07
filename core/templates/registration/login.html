@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+{% load socialaccount %}
+
+  <h2>Login</h2>
+  <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+  </form>
+  <br>
+  <p><strong>-- OR --</strong></p>
+  {% load socialaccount %}
+  <a href="{% provider_login_url 'kakao' %}">Login with Kakao</a><br>
+  <a href="{% provider_login_url 'naver' %}">Login with Naver</a><br>
+  <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+{% endblock %}

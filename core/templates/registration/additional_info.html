@@ -1,0 +1,17 @@
+<h1>this is additional_info.html</h1>
+
+<form action="/input_additional_info/" method="POST">{% csrf_token %}
+    nickname : <input type="text" name="nickname" required maxlength="8"><br /><br />
+    gym :  <select name="gym">
+              <option value="gym1">gym1</option>
+              <option value="gym2">gym2</option>
+              <option value="gym3">gym3</option>
+              <option value="gym4">gym4</option>
+            </select><br /><br />
+    age : <input type="number" name="age" required><br /><br />
+    weight : <input type="number" name="weight" required><br /><br />
+    gender :    <input type="radio" name="gender" value="0" checked> Man
+                <input type="radio" name="gender" value="1"> Woman<br>
+
+    <input type="submit" value="Submit" />
+</form>

@@ -1,0 +1,21 @@
+{% load staticfiles %}
+<html>
+	<head>
+		<title>Social Login!!</title>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+	</head>
+
+    <body>
+        <h1>This is base.html</h1>
+        {% if user.is_active %}
+        <h2>You are signed in as</h2>
+        <p>username : {{ user.username }} </p>
+        <p>firstname : {{ user.first_name }} </p>
+        <p>lastname : {{ user.last_name }} </p>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+        <hr />
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
