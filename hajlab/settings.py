@@ -40,12 +40,12 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 
     ### something I added ###
-    'social_django',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.kakao',
     'allauth.socialaccount.providers.naver',
+    'allauth.socialaccount.providers.facebook',
     #'askdjango_providers.naver',
     #'askdjango_providers.kakao',
 
@@ -55,19 +55,14 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',   # This must be first on the list
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-
-    ### something I added ###
-    'social_django.middleware.SocialAuthExceptionMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',  # This must be last
 )
 
 ROOT_URLCONF = 'hajlab.urls'
@@ -83,10 +78,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
-                ### something I added ###
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                #"allauth.account.context_processors.account",
+                #"allauth.socialaccount.context_processors.socialaccount",
             ],
         },
     },
@@ -128,9 +121,6 @@ STATICFILES_DIRS = [(os.path.join(BASE_DIR, 'static')),]  # no problem?
 ### something I added ###
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    # 'social_core.backends.github.GithubOAuth2',
-    # 'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.facebook.FacebookOAuth2',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
@@ -138,8 +128,14 @@ LOGIN_URL = 'login'
 LOGOUT_URL = '/'
 LOGIN_REDIRECT_URL = 'home'
 
-SOCIAL_AUTH_FACEBOOK_KEY = '1770033746646556'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'ad89aeda2147f013c29118ab3ed6dd89'
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'SCOPE': ['email', 'publish_actions'],
+        'METHOD': 'oauth2',
+        'VERSION': 'v2.4'
+    }
+}
+
 
 SITE_ID = 1 #????
 
@@ -158,3 +154,4 @@ CACHES = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = "default"
 
+APPEND_SLASH = False

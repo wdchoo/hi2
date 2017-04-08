@@ -3,7 +3,7 @@
 {% block content %}
 <p>my page</p>
 
-<a href="/">go to home</a><br />
-<a href="/change_info/">change personal information</a>
+<a href="{% url 'home' %}">go to home</a><br />
+<a href="{% url 'change_info' %}">change personal information</a>
 
 {% endblock %}

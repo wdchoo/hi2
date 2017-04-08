@@ -1,6 +1,6 @@
 <p>this is change_info.html</p>
 
-<form action="/change_info/" method="POST">{% csrf_token %}
+<form action="{% url 'change_info' %}" method="POST">{% csrf_token %}
     nickname : <input type="text" name="nickname" placeholder="{{ ex_nickname }}" required maxlength="8"><br /><br />
     gym :  <select name="gym">
               <option value="gym1">gym1</option>

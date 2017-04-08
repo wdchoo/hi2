@@ -3,9 +3,8 @@
 {% block content %}
 
     <h2>This is home.html</h2>
-    <p>Hello {{ user.first_name }}!</p>
-    <a href="/mypage/">go to mypage</a><br /><br /><br />
-
+    <p>Hello {{ nickname }}!</p>
+    <a href="{% url 'mypage' %}">go to mypage</a><br /><br /><br />
 
     <a href="#" class="WOD_tab" id="metcon_input">Metcon</a>
     <a href="#" class="WOD_tab" id="gymnastics_input">Gymnastics</a>

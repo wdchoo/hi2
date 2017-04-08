@@ -7,10 +7,6 @@ from django.core.cache import cache
 
 from .models import *
 
-from random import randint
-from django.views.generic import TemplateView
-from chartjs.views.lines import BaseLineChartView
-
 from django.db.models import Q
 
 
@@ -19,8 +15,17 @@ def home(request):
     user = request.user
     #cache.set("keykey", "cached string", nx=False)
 
-    if Profile.objects.filter(user=user):
-        return render(request, 'core/home.html')
+    profile = Profile.objects.filter(user=user)
+    if profile:
+        session = request.session
+        if session.get("user" + str(user.id) + "_nickname", False):
+            nickname = session["user" + str(user.id) + "_nickname"]
+        else:
+            session["user" + str(user.id) + "_nickname"] = profile[0].nickname
+            nickname = session["user" + str(user.id) + "_nickname"]
+        #request.session.set_expiry(15)
+
+        return render(request, 'core/home.html', {'nickname': nickname})
     else:
         return render(request, 'registration/additional_info.html')
 
@@ -59,22 +64,25 @@ def get_ranking(request):
 
 @login_required
 def mypage(request):
-    return render(request, 'core/mypage.html')
+    user = request.user
+    session = request.session
+    nickname = session.get("user" + str(user.id) + "_nickname", False)
+    return render(request, 'core/mypage.html', {'nickname': nickname})
 
 
 @login_required
 def change_info(request):
-
+    user = request.user
     if request.method == 'GET':
-        ex_nickname = Profile.objects.get(user=request.user).nickname
+        ex_nickname = Profile.objects.get(user=user).nickname
         return render(request, 'registration/change_info.html', {'ex_nickname': ex_nickname})
 
     elif request.method == 'POST':
         form = request.POST
-        if Profile.objects.filter(~Q(user=request.user)).filter(nickname=form['nickname']):
+        if Profile.objects.filter(~Q(user=user)).filter(nickname=form['nickname']):
             return HttpResponseForbidden('nickname already exists')
 
-        profile = Profile.objects.get(user=request.user)
+        profile = Profile.objects.get(user=user)
         profile.nickname = form['nickname']
         profile.age = form['age']
         profile.weight = form['weight']
@@ -82,14 +90,20 @@ def change_info(request):
         profile.gym = Gym.objects.get(name=form['gym'])
         profile.save()
 
-        return render(request, 'core/mypage.html')
+        session = request.session
+        session["user" + str(user.id) + "_nickname"] = profile.nickname
+
+        return render(request, 'core/mypage.html', {'nickname': profile.nickname})
 
 
 @login_required
 def input(request):
     if request.method == 'POST':
-        profile = Profile.objects.get(user=request.user)
+        user = request.user
+        profile = Profile.objects.get(user=user)
         form = request.POST
+        session = request.session
+        nickname = session["user" + str(user.id) + "_nickname"]
 
         if form.get('met_minutes', False):
             wod = WOD.objects.get(name='metcon')
@@ -105,7 +119,7 @@ def input(request):
                 metcon_rec=all_seconds
             )
             new_rec.save()
-            return render(request, 'core/home.html')
+            return render(request, 'core/home.html', {'nickname': nickname})
 
         elif form.get('gym_reps', False):
             wod = WOD.objects.get(name='gymnastics')
@@ -120,7 +134,7 @@ def input(request):
                 metcon_rec=int(form['gym_reps'])
             )
             new_rec.save()
-            return render(request, 'core/home.html')
+            return render(request, 'core/home.html', {'nickname': nickname})
 
         elif form.get('weight_kg', False):
             wod = WOD.objects.get(name='weightlifting')
@@ -135,7 +149,7 @@ def input(request):
                 metcon_rec=int(form['weight_kg'])
             )
             new_rec.save()
-            return render(request, 'core/home.html')
+            return render(request, 'core/home.html', {'nickname': nickname})
 
         else:
             return HttpResponse('input invalid')
