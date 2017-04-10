@@ -51,7 +51,7 @@ INSTALLED_APPS = (
 
     'chartjs',
     'hajlab',
-    'core'
+    'core',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -116,7 +116,8 @@ TIME_ZONE = 'Asia/Seoul'
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [(os.path.join(BASE_DIR, 'static')),]  # no problem?
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [(os.path.join(BASE_DIR, 'semantic')),]  # no problem?
 
 ### something I added ###
 AUTHENTICATION_BACKENDS = (

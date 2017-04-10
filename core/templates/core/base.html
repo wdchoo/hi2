@@ -3,10 +3,21 @@
 	<head>
 		<title>Social Login!!</title>
         <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script
+          src="https://code.jquery.com/jquery-3.1.1.min.js"
+          integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+          crossorigin="anonymous"></script>
+        <script src="../../../static/out/semantic.min.js"></script>
+        <script src="../../static/js/main.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../../static/out/semantic.min.css">
+        <link rel="stylesheet" type="text/css" href="../../static/css/main.css">
+
 	</head>
 
     <body>
-        <h1>This is base.html</h1>
+
+
+<!--
         {% if user.is_active %}
         <h2>You are signed in as</h2>
         <p>username : {{ user.username }} </p>
@@ -16,6 +27,7 @@
         <a href="{% url 'logout' %}">Logout</a>
         {% endif %}
         <hr />
+-->
         {% block content %}
         {% endblock %}
     </body>
