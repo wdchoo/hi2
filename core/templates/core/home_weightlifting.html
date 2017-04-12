@@ -12,14 +12,13 @@
 
     <p>this is Metcon ranking</p>
     <hr />
-    <div id="result"></div>
     <script>
         $(document).ready(function(){
             setInterval(function() {
                 $.ajax({
                     type: 'POST',
                     dataType: 'html',
-                    url: '/get_ranking/',
+                    url: '/get_weightlifting_ranking/',
                     success: function (result) {
                         $('#result').empty();
                         $('#result').html(result);
@@ -135,7 +134,7 @@
         </div>
         <div class="ui middle aligned stackable grid container" style="padding-top: 84px;">
             <div class="row">
-                <p style="font-size: 64px;">For Time Row 100m</p>
+                <p style="font-size: 64px;">Max Weights Deadlift</p>
             </div>
             <div class="row">
                 <div class="eight wide column">
@@ -147,16 +146,30 @@
                 </div>
                 <div class="six wide column">
                     <div class="ui stackable grid" >
+
+						{% if weightlifting_kg %}
                         <div class="ten wide column">
                             <div class="ui input">
-                                <input placeholder="MM:SS" type="text" style="border-color: black;">
+                                <input name="weightlifting_kg" value="{{ weightlifting_kg }}" type="text" style="border-color: black;" readonly>
                             </div>
                         </div>
                         <div class="six wide column">
-                            <button class="ui secondary button" style="width: full;">
-                                Okay
-                            </button>
+                            <button class="ui secondary button" style="width: full;">Update</button>
                         </div>
+						{% else %}
+						<form action="{% url 'input' %}" method="POST">{% csrf_token %}
+                        <div class="ten wide column">
+                            <div class="ui input">
+<h1>{{ met_minutes }}</h1>
+                                KG:<input name="weightlifting_kg" placeholder="KG" type="text" style="border-color: black;">
+                            </div>
+                        </div>
+                        <div class="six wide column">
+                            <input type="submit" value="Submit" class="ui secondary button" style="width: full;">
+                        </div>
+						</form>
+
+						{% endif %}					
                         <div class="row">
                             <h3>123456789123456789123456789123456789</h3>
                         </div>
@@ -182,7 +195,7 @@
                         <div class="inline fields" style="color: white;">
                             <div class="field">
                                 <div class="ui radio checkbox">
-                                    <input name="frequency" type="radio">
+                                    <input name="frequency" type="radio" checked="checked">
                                     <label style="color: white;">MEN</label>
                                 </div>
                             </div>
@@ -200,20 +213,7 @@
         <div class="ui vertical stripe quote segment">
             <div class="ui equal width stackable internally celled grid">
                 <div class="center aligned row">
-                    <div class="column">
-                        <h3>"What a Company"</h3>
-                        <p>That is what they all say about us</p>
-                    </div>
-                    <div class="column">
-                        <h3>"What a Company"</h3>
-                        <p>That is what they all say about us</p>
-                    </div>
-                    <div class="column">
-                        <h3>"I shouldn't have gone with their competitor."</h3>
-                        <p>
-                            <img src="assets/images/avatar/nan.jpg" class="ui avatar image"> <b>Nan</b> Chief Fun Officer Acme Toys
-                        </p>
-                    </div>
+  					<div id="result">This is ranking</div>
                 </div>
             </div>
         </div>
@@ -265,11 +265,4 @@
             </div>
         </div>
     </div>
-
-            <div class="ui three item menu" id="three_input_tab" style="height: 70px;">
-                <a class="active item" id="metcon_tab" style="background-color:white; color: black;">Metcon</a>
-                <a class="item" id="gymnastics_tab" style="background-color:black; color: white;">Gymnastics</a>
-                <a class="item" id="weightlifting_tab" style="background-color:black; color: white;">Weightlifting</a>
-            </div>
-
     {% endblock %}

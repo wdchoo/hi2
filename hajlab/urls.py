@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
 
-    url(r'^$', core_views.home, name='home'),
+    url(r'^$', core_views.metcon, name='home'),
 
     url(r'^metcon/$', core_views.metcon, name='metcon'),
     url(r'^gymnastics/$', core_views.gymnastics, name='gymnastics'),
@@ -16,7 +16,11 @@ urlpatterns = [
 
     url(r'^input_additional_info/$', core_views.input_additional_info, name='input_additional_info$'),
     url(r'^change_info/$', core_views.change_info, name='change_info'),
-    url(r'^get_ranking/$', core_views.get_ranking, name='get_ranking'),
+
+    url(r'^get_metcon_ranking/$', core_views.get_metcon_ranking, name='get_metcon_ranking'),
+    url(r'^get_gymnastics_ranking/$', core_views.get_gymnastics_ranking, name='get_gymnastics_ranking'),
+    url(r'^get_weightlifting_ranking/$', core_views.get_weightlifting_ranking, name='get_weightlifting_ranking'),
+
     url(r'^mypage/$', core_views.mypage, name='mypage'),
     url(r'^input/$', core_views.input, name='input'),
 

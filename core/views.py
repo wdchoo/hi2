@@ -33,24 +33,62 @@ def home(request):
 @login_required
 def metcon(request):
     user = request.user
-    session = request.session
-    nickname = session["user" + str(user.id) + "_nickname"]
-    return render(request, 'core/home_metcon.html', {'nickname': nickname})
+    profile = Profile.objects.filter(user=user)
+    if profile:
+        session = request.session
+        if session.get("user" + str(user.id) + "_nickname", False):
+            nickname = session["user" + str(user.id) + "_nickname"]
+        else:
+            session["user" + str(user.id) + "_nickname"] = profile[0].nickname
+            nickname = profile[0].nickname 
+        #request.session.set_expiry(15)
+
+        wod = WOD.objects.get(name="metcon")
+        rec = Record.objects.filter(profile=profile).filter(WOD_type=wod).filter(is_newest=True)
+        if rec:
+            met_minutes = rec[0].metcon_rec / 60
+            met_seconds = rec[0].metcon_rec % 60
+            return render(request, 'core/home_metcon.html', {'nickname': nickname, 'met_minutes': met_minutes, 'met_seconds': met_seconds})
+        else:
+            return render(request, 'core/home_metcon.html', {'nickname': nickname})
+
+    else:
+        return render(request, 'registration/additional_info.html')
 
 
 @login_required
 def gymnastics(request):
     user = request.user
+    profile = Profile.objects.get(user=user)
     session = request.session
     nickname = session["user" + str(user.id) + "_nickname"]
-    return render(request, 'core/home_gymnastics.html', {'nickname': nickname})
+    wod = WOD.objects.get(name="gymnastics")
+    rec = Record.objects.filter(profile=profile).filter(WOD_type=wod).filter(is_newest=True)
+    
+    if rec:
+        gymnastics_reps = rec[0].gymnastics_rec
+        return render(request, 'core/home_gymnastics.html', {'nickname': nickname, 'gymnastics_reps': gymnastics_reps})
+    else:
+        return render(request, 'core/home_gymnastics.html', {'nickname': nickname})
 
 
 @login_required
 def weightlifting(request):
     user = request.user
+    profile = Profile.objects.get(user=user)
     session = request.session
     nickname = session["user" + str(user.id) + "_nickname"]
+    wod = WOD.objects.get(name="weightlifting")
+    rec = Record.objects.filter(profile=profile).filter(WOD_type=wod).filter(is_newest=True)
+
+    if rec:
+        weightlifting_kg = rec[0].weightlifting_rec
+        return render(request, 'core/home_weightlifting.html', {'nickname': nickname, 'weightlifting_kg': weightlifting_kg})
+    else:
+        return render(request, 'core/home_weightlifting.html', {'nickname': nickname})
+
+      
+
     return render(request, 'core/home_weightlifting.html', {'nickname': nickname})
 
 
@@ -77,11 +115,29 @@ def input_additional_info(request):
 
 
 @csrf_exempt
-def get_ranking(request):
+def get_metcon_ranking(request):
     html = ""
     wod = WOD.objects.get(name='metcon')
-    metcon_ranking_list = Record.objects.filter(WOD_type=wod).filter(is_newest=True).order_by('metcon_rec')
-    for rank in metcon_ranking_list:
+    ranking_list = Record.objects.filter(WOD_type=wod).filter(is_newest=True).order_by('metcon_rec')
+    for rank in ranking_list:
+        html += "<p>" + rank.profile.nickname + "</p>"
+    return HttpResponse(html)
+
+@csrf_exempt
+def get_gymnastics_ranking(request):
+    html = ""
+    wod = WOD.objects.get(name='gymnastics')
+    ranking_list = Record.objects.filter(WOD_type=wod).filter(is_newest=True).order_by('-gymnastics_rec')
+    for rank in ranking_list:
+        html += "<p>" + rank.profile.nickname + "</p>"
+    return HttpResponse(html)
+
+@csrf_exempt
+def get_weightlifting_ranking(request):
+    html = ""
+    wod = WOD.objects.get(name='weightlifting')
+    ranking_list = Record.objects.filter(WOD_type=wod).filter(is_newest=True).order_by('-weightlifting_rec')
+    for rank in ranking_list:
         html += "<p>" + rank.profile.nickname + "</p>"
     return HttpResponse(html)
 
@@ -130,6 +186,7 @@ def input(request):
         nickname = session["user" + str(user.id) + "_nickname"]
 
         if form.get('met_minutes', False):
+            print('metcon input!')
             wod = WOD.objects.get(name='metcon')
             all_seconds = int(form['met_minutes']) * 60 + int(form['met_seconds'])
             rec = Record.objects.filter(profile=profile).filter(WOD_type=wod).filter(is_newest=True)
@@ -139,13 +196,14 @@ def input(request):
                 ex_rec.save()
             new_rec = Record.objects.create(
                 profile=profile,
-                WOD_type=WOD.objects.get(name='metcon'),
+                WOD_type=wod,
                 metcon_rec=all_seconds
             )
             new_rec.save()
-            return render(request, 'core/home.html', {'nickname': nickname})
+            return render(request, 'core/home_metcon.html', {'nickname': nickname, 'met_minutes': form['met_minutes'], 'met_seconds': form['met_seconds']})
 
-        elif form.get('gym_reps', False):
+        elif form.get('gymnastics_reps', False):
+            print('gymnastics input!')
             wod = WOD.objects.get(name='gymnastics')
             rec = Record.objects.filter(profile=profile).filter(WOD_type=wod).filter(is_newest=True)
             if rec:
@@ -154,13 +212,14 @@ def input(request):
                 ex_rec.save()
             new_rec = Record.objects.create(
                 profile=profile,
-                WOD_type=WOD.objects.get(name='gymnastics'),
-                metcon_rec=int(form['gym_reps'])
+                WOD_type=wod,
+                gymnastics_rec=int(form['gymnastics_reps'])
             )
             new_rec.save()
-            return render(request, 'core/home.html', {'nickname': nickname})
+            return render(request, 'core/home_gymnastics.html', {'nickname': nickname, 'gymnastics_reps': form['gymnastics_reps']})
 
-        elif form.get('weight_kg', False):
+        elif form.get('weightlifting_kg', False):
+            print('weightlifting input!')
             wod = WOD.objects.get(name='weightlifting')
             rec = Record.objects.filter(profile=profile).filter(WOD_type=wod).filter(is_newest=True)
             if rec:
@@ -169,11 +228,11 @@ def input(request):
                 ex_rec.save()
             new_rec = Record.objects.create(
                 profile=profile,
-                WOD_type=WOD.objects.get(name='weightlifting'),
-                metcon_rec=int(form['weight_kg'])
+                WOD_type=wod,
+                weightlifting_rec=int(form['weightlifting_kg'])
             )
             new_rec.save()
-            return render(request, 'core/home.html', {'nickname': nickname})
+            return render(request, 'core/home_weightlifting.html', {'nickname': nickname})
 
         else:
             return HttpResponse('input invalid')
