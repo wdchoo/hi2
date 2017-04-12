@@ -1,0 +1,275 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h2>This is home.html</h2>
+    <p>Hello {{ nickname }}!</p>
+    <a href="{% url 'mypage' %}">go to mypage</a><br /><br /><br />
+
+    <a href="#" class="WOD_tab" id="metcon_input">Metcon</a>
+    <a href="#" class="WOD_tab" id="gymnastics_input">Gymnastics</a>
+    <a href="#" class="WOD_tab" id="weightlifting_input">Weightlifting</a>
+    <div id="record_input">hihi~</div>
+
+    <p>this is Metcon ranking</p>
+    <hr />
+    <div id="result"></div>
+    <script>
+        $(document).ready(function(){
+            setInterval(function() {
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'html',
+                    url: '/get_ranking/',
+                    success: function (result) {
+                        $('#result').empty();
+                        $('#result').html(result);
+                    }
+                });
+            }, 10000);
+
+            $('#metcon_input').click( function() {
+                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
+                html += "Minutes : <input type='number' name='met_minutes'><br />";
+                html += "Seconds : <input type='number' name='met_seconds'><br />";
+                html += "<input type='submit' value='Submit' id='s'>";
+                html += "</form>";
+                $('#record_input').html('');
+                $('#record_input').append(html);
+            });
+
+            $('#gymnastics_input').click( function() {
+                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
+                html += "REPS : <input type='number' name='gym_reps'><br />";
+                html += "<input type='submit' value='Submit' id='s'>";
+                html += "</form>";
+                $('#record_input').html('');
+                $('#record_input').append(html);
+            });
+
+            $('#weightlifting_input').click( function() {
+                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
+                html += "KG : <input type='number' name='weight_kg'><br />";
+                html += "<input type='submit' value='Submit' id='s'>";
+                html += "</form>";
+                $('#record_input').html('');
+                $('#record_input').append(html);
+            });
+			
+/*
+            $('#metcon_tab').click( function(e) {
+				alert('hi~');
+				$(this).css("background-color", "white");
+				$(this).css("color", "black");
+
+				$("#gymnastics_tab").css("background-color", "black");
+				$("#gymnastics_tab").css("color", "white");
+
+				$("#weightlifting_tab").css("background-color", "black");
+				$("#weightlifting_tab").css("color", "white");
+
+            });
+
+            $('#gymnastics_tab').click( function() {
+				alert('hi~')
+				$(this).css("background-color", "white");
+				$(this).css("color", "black");
+
+				$("#metcon_tab").css("background-color", "black");
+				$("#metcon_tab").css("color", "white");
+
+				$("#weightlifting_tab").css("background-color", "black");
+				$("#weightlifting_tab").css("color", "white");
+            });
+
+            $('#weightlifting_tab').click( function() {
+				alert('hi~')
+				$(this).css("background-color", "white");
+				$(this).css("color", "black");
+
+				$("metcon_tab").css("background-color", "black");
+				$("#metcon_tab").css("color", "white");
+
+				$("#gymnastics_tab").css("background-color", "black");
+				$("#gymnastics_tab").css("color", "white");
+            });
+*/
+        });
+
+    </script>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+    <a class="active item">FIFL</a>
+    <a href="{% url 'logout' %}" class="item">Logout</a>
+</div>
+
+
+<!-- Page Contents -->
+<div class="pusher">
+    <div class="ui inverted vertical masthead center aligned segment" style="background-color: black;">
+
+        <div class="ui container">
+            <div class="ui large secondary inverted pointing menu">
+                <a class="toc item">
+                    <i class="sidebar icon"></i>
+                </a>
+                <a class="active item">FIFL</a>
+                <div class="right item">
+                    <a href="{% url 'logout' %}"class="ui inverted button">Log out</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui text container">
+            <h1 class="ui inverted header">
+                2017<br/>Play the Crossfit
+            </h1>
+            <h3>Stay fit Experience flow</h3>
+        </div>
+    </div>
+    <div>
+        <div class="ui three item menu" id="three_input_tab" style="height: 70px;">
+            <a href="{% url 'metcon' %}" class="item" id="metcon_tab" style="background-color:black; color: white;">Metcon</a>
+            <a href="." class="active item" id="gymnastics_tab" style="background-color:white; color: black;">Gymnastics</a>
+            <a href="{% url 'weightlifting' %}" class="item" id="weightlifting_tab" style="background-color:black; color: white;">Weightlifting</a>
+        </div>
+        <div class="ui middle aligned stackable grid container" style="padding-top: 84px;">
+            <div class="row">
+                <p style="font-size: 64px;">For Time Row 100m</p>
+            </div>
+            <div class="row">
+                <div class="eight wide column">
+                    <div class="container" style="word-wrap: break-word;">
+                        <h3>
+                            123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789
+                        </h3>
+                    </div>
+                </div>
+                <div class="six wide column">
+                    <div class="ui stackable grid" >
+                        <div class="ten wide column">
+                            <div class="ui input">
+                                <input placeholder="MM:SS" type="text" style="border-color: black;">
+                            </div>
+                        </div>
+                        <div class="six wide column">
+                            <button class="ui secondary button" style="width: full;">
+                                Okay
+                            </button>
+                        </div>
+                        <div class="row">
+                            <h3>123456789123456789123456789123456789</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui vertical stripe segment" style="background-color: black; color: white;">
+        <div class="ui middle aligned stackable grid container">
+            <div class="row">
+                <div class="eight wide column">
+                    <p style="font-size: 64px;">Real Time</p>
+                </div>
+                <div class="six wide right floated column">
+                    <p>We can give your company superpowers to do things that they never thought possible.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="center aligned column">
+                    <div class="ui form">
+                        <div class="inline fields" style="color: white;">
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input name="frequency" type="radio">
+                                    <label style="color: white;">MEN</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input name="frequency" type="radio">
+                                    <label style="color: white;">WOMEN</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui vertical stripe quote segment">
+            <div class="ui equal width stackable internally celled grid">
+                <div class="center aligned row">
+                    <div class="column">
+                        <h3>"What a Company"</h3>
+                        <p>That is what they all say about us</p>
+                    </div>
+                    <div class="column">
+                        <h3>"What a Company"</h3>
+                        <p>That is what they all say about us</p>
+                    </div>
+                    <div class="column">
+                        <h3>"I shouldn't have gone with their competitor."</h3>
+                        <p>
+                            <img src="assets/images/avatar/nan.jpg" class="ui avatar image"> <b>Nan</b> Chief Fun Officer Acme Toys
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui vertical stripe segment">
+
+
+        <div class="ui vertical stripe segment">
+            <div class="ui text container">
+                <h3 class="ui header">Breaking The Grid, Grabs Your Attention</h3>
+                <p>Instead of focusing on content creation and hard work, we have learned how to master the art of doing nothing by providing massive amounts of whitespace and generic content that can seem massive, monolithic and worth your attention.</p>
+                <a class="ui large button">Read More</a>
+                <h4 class="ui horizontal header divider">
+                    <a href="#">Case Studies</a>
+                </h4>
+                <h3 class="ui header">Did We Tell You About Our Bananas?</h3>
+                <p>Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but its really true. It took years of gene splicing and combinatory DNA research, but our bananas can really dance.</p>
+                <a class="ui large button">I'm Still Quite Interested</a>
+            </div>
+        </div>
+
+        <div class="ui inverted vertical footer segment">
+            <div class="ui container">
+                <div class="ui stackable inverted divided equal height stackable grid">
+                    <div class="three wide column">
+                        <h4 class="ui inverted header">About</h4>
+                        <div class="ui inverted link list">
+                            <a href="#" class="item">Sitemap</a>
+                            <a href="#" class="item">Contact Us</a>
+                            <a href="#" class="item">Religious Ceremonies</a>
+                            <a href="#" class="item">Gazebo Plans</a>
+                        </div>
+                    </div>
+                    <div class="three wide column">
+                        <h4 class="ui inverted header">Services</h4>
+                        <div class="ui inverted link list">
+                            <a href="#" class="item">Banana Pre-Order</a>
+                            <a href="#" class="item">DNA FAQ</a>
+                            <a href="#" class="item">How To Access</a>
+                            <a href="#" class="item">Favorite X-Men</a>
+                        </div>
+                    </div>
+                    <div class="seven wide column">
+                        <h4 class="ui inverted header">Footer Header</h4>
+                        <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <div class="ui three item menu" id="three_input_tab" style="height: 70px;">
+                <a class="active item" id="metcon_tab" style="background-color:white; color: black;">Metcon</a>
+                <a class="item" id="gymnastics_tab" style="background-color:black; color: white;">Gymnastics</a>
+                <a class="item" id="weightlifting_tab" style="background-color:black; color: white;">Weightlifting</a>
+            </div>
+
+    {% endblock %}

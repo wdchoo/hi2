@@ -49,7 +49,7 @@ INSTALLED_APPS = (
     #'askdjango_providers.naver',
     #'askdjango_providers.kakao',
 
-    'chartjs',
+    #'chartjs',
     'hajlab',
     'core',
 )
@@ -95,7 +95,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hajlab',
-        'USER': 'root',
+        'USER': 'esmond',
         'PASSWORD': 'wjddus159',
         'HOST': '',
         'POST': '',

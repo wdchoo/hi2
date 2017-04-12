@@ -1,7 +1,6 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<!--
     <h2>This is home.html</h2>
     <p>Hello {{ nickname }}!</p>
     <a href="{% url 'mypage' %}">go to mypage</a><br /><br /><br />
@@ -26,50 +25,82 @@
                         $('#result').html(result);
                     }
                 });
-            }, 50000);
+            }, 10000);
 
             $('#metcon_input').click( function() {
-                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}"
-                html += "Minutes : <input type='number' name='met_minutes'><br />"
-                html += "Seconds : <input type='number' name='met_seconds'><br />"
-                html += "<input type='submit' value='Submit' id='s'>"
-                html += "</form>"
+                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
+                html += "Minutes : <input type='number' name='met_minutes'><br />";
+                html += "Seconds : <input type='number' name='met_seconds'><br />";
+                html += "<input type='submit' value='Submit' id='s'>";
+                html += "</form>";
                 $('#record_input').html('');
                 $('#record_input').append(html);
             });
 
             $('#gymnastics_input').click( function() {
-                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}"
-                html += "REPS : <input type='number' name='gym_reps'><br />"
-                html += "<input type='submit' value='Submit' id='s'>"
-                html += "</form>"
+                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
+                html += "REPS : <input type='number' name='gym_reps'><br />";
+                html += "<input type='submit' value='Submit' id='s'>";
+                html += "</form>";
                 $('#record_input').html('');
                 $('#record_input').append(html);
             });
 
             $('#weightlifting_input').click( function() {
-                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}"
-                html += "KG : <input type='number' name='weight_kg'><br />"
-                html += "<input type='submit' value='Submit' id='s'>"
-                html += "</form>"
+                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
+                html += "KG : <input type='number' name='weight_kg'><br />";
+                html += "<input type='submit' value='Submit' id='s'>";
+                html += "</form>";
                 $('#record_input').html('');
                 $('#record_input').append(html);
             });
+			
+/*
+            $('#metcon_tab').click( function(e) {
+				alert('hi~');
+				$(this).css("background-color", "white");
+				$(this).css("color", "black");
 
-            $('#s').click( function() {
-                alert('input done!');
+				$("#gymnastics_tab").css("background-color", "black");
+				$("#gymnastics_tab").css("color", "white");
+
+				$("#weightlifting_tab").css("background-color", "black");
+				$("#weightlifting_tab").css("color", "white");
+
             });
+
+            $('#gymnastics_tab').click( function() {
+				alert('hi~')
+				$(this).css("background-color", "white");
+				$(this).css("color", "black");
+
+				$("#metcon_tab").css("background-color", "black");
+				$("#metcon_tab").css("color", "white");
+
+				$("#weightlifting_tab").css("background-color", "black");
+				$("#weightlifting_tab").css("color", "white");
+            });
+
+            $('#weightlifting_tab').click( function() {
+				alert('hi~')
+				$(this).css("background-color", "white");
+				$(this).css("color", "black");
+
+				$("metcon_tab").css("background-color", "black");
+				$("#metcon_tab").css("color", "white");
+
+				$("#gymnastics_tab").css("background-color", "black");
+				$("#gymnastics_tab").css("color", "white");
+            });
+*/
         });
 
-
     </script>
--->
-
 
 <!-- Sidebar Menu -->
 <div class="ui vertical inverted sidebar menu">
     <a class="active item">FIFL</a>
-    <a class="item">Login</a>
+    <a href="{% url 'logout' %}" class="item">Logout</a>
 </div>
 
 
@@ -84,7 +115,7 @@
                 </a>
                 <a class="active item">FIFL</a>
                 <div class="right item">
-                    <a class="ui inverted button">Log in</a>
+                    <a href="{% url 'logout' %}"class="ui inverted button">Log out</a>
                 </div>
             </div>
         </div>
@@ -97,12 +128,10 @@
         </div>
     </div>
     <div>
-        <div>
-            <div class="ui three item menu" style="height: 70px;">
-                <a class="active item" style="background-color:white; color: black;">Editorials</a>
-                <a class="item" style="background-color:black; color: white;">Reviews</a>
-                <a class="item" style="background-color:black; color: white;">Upcoming Events</a>
-            </div>
+        <div class="ui three item menu" id="three_input_tab" style="height: 70px;">
+            <a href="{% url 'metcon' %}" class="active item" id="metcon_tab" style="background-color:black; color: white;">Metcon</a>
+            <a href="{% url 'gymnastics' %}" class="item" id="gymnastics_tab" style="background-color:black; color: white;">Gymnastics</a>
+            <a href="." class="item" id="weightlifting_tab" style="background-color:white; color: black;">Weightlifting</a>
         </div>
         <div class="ui middle aligned stackable grid container" style="padding-top: 84px;">
             <div class="row">
@@ -237,5 +266,10 @@
         </div>
     </div>
 
+            <div class="ui three item menu" id="three_input_tab" style="height: 70px;">
+                <a class="active item" id="metcon_tab" style="background-color:white; color: black;">Metcon</a>
+                <a class="item" id="gymnastics_tab" style="background-color:black; color: white;">Gymnastics</a>
+                <a class="item" id="weightlifting_tab" style="background-color:black; color: white;">Weightlifting</a>
+            </div>
 
     {% endblock %}

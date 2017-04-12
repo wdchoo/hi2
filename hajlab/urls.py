@@ -9,6 +9,11 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, name='logout'),
 
     url(r'^$', core_views.home, name='home'),
+
+    url(r'^metcon/$', core_views.metcon, name='metcon'),
+    url(r'^gymnastics/$', core_views.gymnastics, name='gymnastics'),
+    url(r'^weightlifting/$', core_views.weightlifting, name='weightlifting'),
+
     url(r'^input_additional_info/$', core_views.input_additional_info, name='input_additional_info$'),
     url(r'^change_info/$', core_views.change_info, name='change_info'),
     url(r'^get_ranking/$', core_views.get_ranking, name='get_ranking'),

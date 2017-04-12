@@ -25,9 +25,33 @@ def home(request):
             nickname = session["user" + str(user.id) + "_nickname"]
         #request.session.set_expiry(15)
 
-        return render(request, 'core/home.html', {'nickname': nickname})
+        return render(request, 'core/home_metcon.html', {'nickname': nickname})
     else:
         return render(request, 'registration/additional_info.html')
+
+
+@login_required
+def metcon(request):
+    user = request.user
+    session = request.session
+    nickname = session["user" + str(user.id) + "_nickname"]
+    return render(request, 'core/home_metcon.html', {'nickname': nickname})
+
+
+@login_required
+def gymnastics(request):
+    user = request.user
+    session = request.session
+    nickname = session["user" + str(user.id) + "_nickname"]
+    return render(request, 'core/home_gymnastics.html', {'nickname': nickname})
+
+
+@login_required
+def weightlifting(request):
+    user = request.user
+    session = request.session
+    nickname = session["user" + str(user.id) + "_nickname"]
+    return render(request, 'core/home_weightlifting.html', {'nickname': nickname})
 
 
 @login_required
@@ -49,7 +73,7 @@ def input_additional_info(request):
         )
         profile.save()
 
-        return render(request, 'core/home.html')
+        return render(request, 'core/home_metcon.html')
 
 
 @csrf_exempt
