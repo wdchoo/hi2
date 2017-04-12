@@ -15,19 +15,6 @@
 	</head>
 
     <body>
-
-
-<!--
-        {% if user.is_active %}
-        <h2>You are signed in as</h2>
-        <p>username : {{ user.username }} </p>
-        <p>firstname : {{ user.first_name }} </p>
-        <p>lastname : {{ user.last_name }} </p>
-        <p>nickname : {{ nickname }}</p>
-        <a href="{% url 'logout' %}">Logout</a>
-        {% endif %}
-        <hr />
--->
         {% block content %}
         {% endblock %}
     </body>

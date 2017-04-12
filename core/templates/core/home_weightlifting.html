@@ -1,17 +1,6 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>This is home.html</h2>
-    <p>Hello {{ nickname }}!</p>
-    <a href="{% url 'mypage' %}">go to mypage</a><br /><br /><br />
-
-    <a href="#" class="WOD_tab" id="metcon_input">Metcon</a>
-    <a href="#" class="WOD_tab" id="gymnastics_input">Gymnastics</a>
-    <a href="#" class="WOD_tab" id="weightlifting_input">Weightlifting</a>
-    <div id="record_input">hihi~</div>
-
-    <p>this is Metcon ranking</p>
-    <hr />
     <script>
         $(document).ready(function(){
             setInterval(function() {
@@ -25,75 +14,7 @@
                     }
                 });
             }, 10000);
-
-            $('#metcon_input').click( function() {
-                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
-                html += "Minutes : <input type='number' name='met_minutes'><br />";
-                html += "Seconds : <input type='number' name='met_seconds'><br />";
-                html += "<input type='submit' value='Submit' id='s'>";
-                html += "</form>";
-                $('#record_input').html('');
-                $('#record_input').append(html);
-            });
-
-            $('#gymnastics_input').click( function() {
-                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
-                html += "REPS : <input type='number' name='gym_reps'><br />";
-                html += "<input type='submit' value='Submit' id='s'>";
-                html += "</form>";
-                $('#record_input').html('');
-                $('#record_input').append(html);
-            });
-
-            $('#weightlifting_input').click( function() {
-                var html = "<form action='{% url "input" %}' method='POST'>{% csrf_token %}";
-                html += "KG : <input type='number' name='weight_kg'><br />";
-                html += "<input type='submit' value='Submit' id='s'>";
-                html += "</form>";
-                $('#record_input').html('');
-                $('#record_input').append(html);
-            });
-			
-/*
-            $('#metcon_tab').click( function(e) {
-				alert('hi~');
-				$(this).css("background-color", "white");
-				$(this).css("color", "black");
-
-				$("#gymnastics_tab").css("background-color", "black");
-				$("#gymnastics_tab").css("color", "white");
-
-				$("#weightlifting_tab").css("background-color", "black");
-				$("#weightlifting_tab").css("color", "white");
-
-            });
-
-            $('#gymnastics_tab').click( function() {
-				alert('hi~')
-				$(this).css("background-color", "white");
-				$(this).css("color", "black");
-
-				$("#metcon_tab").css("background-color", "black");
-				$("#metcon_tab").css("color", "white");
-
-				$("#weightlifting_tab").css("background-color", "black");
-				$("#weightlifting_tab").css("color", "white");
-            });
-
-            $('#weightlifting_tab').click( function() {
-				alert('hi~')
-				$(this).css("background-color", "white");
-				$(this).css("color", "black");
-
-				$("metcon_tab").css("background-color", "black");
-				$("#metcon_tab").css("color", "white");
-
-				$("#gymnastics_tab").css("background-color", "black");
-				$("#gymnastics_tab").css("color", "white");
-            });
-*/
         });
-
     </script>
 
 <!-- Sidebar Menu -->
